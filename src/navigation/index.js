@@ -3,73 +3,77 @@ import AnalyticsPage from '../views/AnalyticsPage';
 import HomePage from '../views/HomePage';
 import SettingPage from '../views/SettingPage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DashboardPage from '../views/DashboardPage';
-import Colors from '../../assets/colors';
+import { Dark } from '../../assets/colors';
+import FavouritePage from '../views/FavouritePage';
 
 const { createBottomTabNavigator } = require('@react-navigation/bottom-tabs');
 const Tab = createBottomTabNavigator();
 
-const IonIcon = focus => (
+const Icon = ({ isFocus, icon }) => (
   <Ionicons
-    name="analytics"
-    size={20}
-    color={focus ? Colors.dark.primary : `${Colors.dark.primary}40`}
+    name={isFocus ? icon : `${icon}-outline`}
+    size={24}
+    color={isFocus ? Dark.accent : `${Dark.accent}40`}
   />
 );
+
+const tabBarOptions = {
+  headerShown: false,
+  tabBarShowLabel: false,
+  tabBarStyle: { borderTopWidth: 0 },
+  tabBarActiveBackgroundColor: Dark.background,
+  tabBarInactiveBackgroundColor: Dark.background,
+  tabBarActiveTintColor: Dark.accent,
+  tabBarInactiveTintColor: Dark.accent * 0.4,
+};
+
+const screens = [
+  {
+    name: 'home',
+    component: DashboardPage,
+    options: {
+      ...tabBarOptions,
+    },
+  },
+  {
+    name: 'favourite',
+    component: FavouritePage,
+    options: {
+      ...tabBarOptions,
+    },
+  },
+  {
+    name: 'analytics',
+    component: AnalyticsPage,
+    options: {
+      ...tabBarOptions,
+    },
+  },
+  {
+    name: 'settings',
+    component: SettingPage,
+    options: {
+      ...tabBarOptions,
+    },
+  },
+];
 
 const BottomNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={{
-        tabBarActiveBackgroundColor: Colors.dark.background,
-        tabBarInactiveBackgroundColor: Colors.dark.background,
-        tabBarActiveTintColor: Colors.dark.background,
-        tabBarInactiveTintColor: Colors.dark.background,
-        tabBarStyle: { borderTopWidth: 0 },
-      }}>
-      <Tab.Screen
-        name="Dashboard"
-        component={DashboardPage}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <MaterialIcons
-              name="dashboard"
-              size={20}
-              color={
-                focused ? Colors.dark.primary : `${Colors.dark.primary}40`
-              }
-              active
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Analytics"
-        component={AnalyticsPage}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => <IonIcon focus={focused} />,
-        }}
-      />
-      <Tab.Screen name="Home" component={HomePage} />
-      <Tab.Screen
-        name="Setting"
-        component={SettingPage}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ focused }) => (
-            <Ionicons
-              name="settings"
-              size={20}
-              color={
-                focused ? Colors.dark.primary : `${Colors.dark.primary}40`
-              }
-            />
-          ),
-        }}
-      />
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ focused }) => {
+          let iconName = route.name;
+          if (route.name == 'favourite') {
+            iconName = 'star';
+          }
+          return <Icon icon={iconName} isFocus={focused} />;
+        },
+      })}>
+      {screens.map(screen => (
+        <Tab.Screen key={screen.name} {...screen} />
+      ))}
     </Tab.Navigator>
   );
 };

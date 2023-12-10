@@ -1,16 +1,15 @@
 import { View, Text, StyleSheet, SafeAreaView } from 'react-native';
 import React from 'react';
-import Colors from '../../assets/colors';
 import Card from '../components/Card';
+import { Dark } from '../../assets/colors';
 
 const styles = StyleSheet.create({
   bg: {
     flex: 1,
-    backgroundColor: Colors.dark.background,
-    paddingHorizontal: 5,
+    backgroundColor: Dark.background,
   },
   text: {
-    color: Colors.dark.background,
+    color: Dark.background,
   },
 });
 

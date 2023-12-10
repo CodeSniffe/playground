@@ -2,14 +2,19 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import store from './src/store';
 import BottomNavigator from './src/navigation';
-import { DarkTheme, NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'react-native';
 
 const App = () => {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <BottomNavigator />
-      </NavigationContainer>
+      <StatusBar barStyle={'light-content'} />
+      <SafeAreaProvider>
+        <NavigationContainer>
+          <BottomNavigator />
+        </NavigationContainer>
+      </SafeAreaProvider>
     </Provider>
   );
 };
